@@ -283,7 +283,7 @@ function generateDailyMatrixWorksheetXml(
       </Row>
       <Row ss:Height="20">
         <Cell ss:MergeAcross="${mergeSpan}" ss:StyleID="SubTitle">
-          <Data ss:Type="String">HỆ THỐNG DỰ BÁO &amp; LẬP KẾ HOẠCH KHẢO SÁT - 28 ĐỊA BÀN</Data>
+          <Data ss:Type="String">ĐƠN VỊ HÀNH CHÍNH MỚI: TỈNH GIA LAI (28 ĐƠN VỊ CẤP HUYỆN) — MÔ HÌNH 34 TỈNH THÀNH</Data>
         </Cell>
       </Row>
       <Row ss:Height="6"/>
@@ -300,14 +300,14 @@ function generateDailyMatrixWorksheetXml(
         </Cell>
       </Row>
 
-      <!-- Legend Explanation Block -->
+      <!-- Legend Explanation Block (Formal - NO ICONS) -->
       <Row ss:Height="22">
         <Cell ss:StyleID="CellGo"><Data ss:Type="String">6h / 3h</Data></Cell>
-        <Cell ss:MergeAcross="3" ss:StyleID="LegendVal"><Data ss:Type="String">BAY ĐƯỢC • Thời tiết thuận lợi</Data></Cell>
+        <Cell ss:MergeAcross="3" ss:StyleID="LegendVal"><Data ss:Type="String">ĐẠT (GO): Thời tiết thuận lợi, cất cánh an toàn</Data></Cell>
         <Cell ss:StyleID="CellCaution"><Data ss:Type="String">2h / 1h</Data></Cell>
-        <Cell ss:MergeAcross="4" ss:StyleID="LegendVal"><Data ss:Type="String">CẨN TRỌNG• Gió mạnh / nguy cơ mưa rào</Data></Cell>
-        <Cell ss:StyleID="CellNoGo"><Data ss:Type="String">✕</Data></Cell>
-        <Cell ss:MergeAcross="${mergeSpan - 11}" ss:StyleID="LegendVal"><Data ss:Type="String">KHÔNG BAY • Mưa / dông bão / gió giật</Data></Cell>
+        <Cell ss:MergeAcross="4" ss:StyleID="LegendVal"><Data ss:Type="String">CẢNH BÁO (CAUTION): Cận biên an toàn, theo dõi gió và mây</Data></Cell>
+        <Cell ss:StyleID="CellNoGo"><Data ss:Type="String">0h</Data></Cell>
+        <Cell ss:MergeAcross="${mergeSpan - 11}" ss:StyleID="LegendVal"><Data ss:Type="String">KHÔNG ĐẠT (NO GO): Không đủ điều kiện an toàn, đình chỉ bay</Data></Cell>
       </Row>
       <Row ss:Height="8"/>
 
@@ -370,7 +370,7 @@ function generateDailyMatrixWorksheetXml(
                   cond === "GO" ? "CellGo" : cond === "CAUTION" ? "CellCaution" : "CellNoGo";
 
                 const getCellContent = (goHours: number, cond: FlightCondition) =>
-                  cond === "NO_GO" ? "✕" : `${goHours}h`;
+                  cond === "NO_GO" ? "0h" : `${goHours}h`;
 
                 const mStyle = getCellStyle(daySummary.morning.condition);
                 const aStyle = getCellStyle(daySummary.afternoon.condition);
@@ -463,7 +463,7 @@ function generateDailyMatrixWorksheetXml(
       </Row>
       <Row ss:Height="22">
         <Cell ss:MergeAcross="${mergeSpan}" ss:StyleID="CellNormal">
-          <Data ss:Type="String">3. Khi gặp ô màu Đỏ (✕) hoặc Cam: Nghiêm cấm bay tầm xa ngoài tầm nhìn (BVLOS).</Data>
+          <Data ss:Type="String">3. Khi gặp ô màu Đỏ (0h) hoặc Cam: Nghiêm cấm bay tầm xa ngoài tầm nhìn (BVLOS).</Data>
         </Cell>
       </Row>
     </Table>

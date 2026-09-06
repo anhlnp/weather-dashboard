@@ -1,14 +1,16 @@
-import { Paper, Box, Typography, Stack, Divider, Chip } from "@mui/material";
+import { Paper, Box, Typography, Stack, Divider, Chip, Button } from "@mui/material";
 import AirIcon from "@mui/icons-material/Air";
 import WaterDropIcon from "@mui/icons-material/WaterDrop";
 import CloudIcon from "@mui/icons-material/Cloud";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import FlightConditionChip from "../Weather/FlightConditionChip";
 import type { DistrictDaySummary, SessionSummary } from "../../types/weather";
 
 interface Props {
   summary: DistrictDaySummary;
   onClose: () => void;
+  onExportDistrictExcel?: () => void;
 }
 
 function SessionBlock({ label, s }: { label: string; s: SessionSummary }) {
@@ -41,7 +43,7 @@ function SessionBlock({ label, s }: { label: string; s: SessionSummary }) {
   );
 }
 
-export default function DetailPanel({ summary, onClose }: Props) {
+export default function DetailPanel({ summary, onClose, onExportDistrictExcel }: Props) {
   return (
     <Paper
       sx={{
@@ -60,7 +62,21 @@ export default function DetailPanel({ summary, onClose }: Props) {
         <Typography variant="h6" sx={{ fontWeight: 700 }}>
           📍 {summary.districtName} — {summary.dayOfWeek} {summary.date.substring(5).replace("-", "/")}
         </Typography>
-        <Chip label="✕ Đóng" size="small" onClick={onClose} sx={{ cursor: "pointer" }} />
+        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+          {onExportDistrictExcel && (
+            <Button
+              size="small"
+              variant="outlined"
+              color="success"
+              startIcon={<FileDownloadIcon />}
+              onClick={onExportDistrictExcel}
+              sx={{ textTransform: "none", fontSize: "0.75rem", py: 0.2, px: 1, borderRadius: 1 }}
+            >
+              Xuất Excel các xã của {summary.districtName}
+            </Button>
+          )}
+          <Chip label="✕ Đóng" size="small" onClick={onClose} sx={{ cursor: "pointer" }} />
+        </Stack>
       </Stack>
 
       <Stack direction={{ xs: "column", md: "row" }} spacing={3}>

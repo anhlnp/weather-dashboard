@@ -160,50 +160,106 @@ export const GIA_LAI_DISTRICTS: District[] = [
     ]
   },
 
-  // ==================== KHU VỰC BÌNH ĐỊNH CŨ ====================
+  // ==================== KHU VỰC BÌNH ĐỊNH (11 ĐƠN VỊ HÀNH CHÍNH) ====================
   {
     id: "quy_nhon", name: "TP. Quy Nhơn", type: "city", region: "binh_dinh",
-    centerLat: 13.7765, centerLon: 109.2237, communes: []
+    centerLat: 13.7765, centerLon: 109.2237,
+    communes: [
+      "P. Trần Phú", "P. Lê Hồng Phong", "P. Trần Hưng Đạo", "P. Lê Lợi", "P. Thị Nại",
+      "P. Đống Đa", "P. Hải Cảng", "P. Ngô Mây", "P. Nguyễn Văn Cừ", "P. Quang Trung",
+      "P. Ghềnh Ráng", "P. Bùi Thị Xuân", "P. Trần Quang Diệu", "P. Nhơn Bình", "P. Nhơn Phú",
+      "Xã Nhơn Lý", "Xã Nhơn Hội", "Xã Nhơn Hải", "Xã Nhơn Châu", "Xã Phước Mỹ"
+    ]
   },
   {
     id: "an_nhon", name: "TX. An Nhơn", type: "town", region: "binh_dinh",
-    centerLat: 13.8833, centerLon: 109.1167, communes: []
+    centerLat: 13.8833, centerLon: 109.1167,
+    communes: [
+      "P. Bình Định", "P. Đập Đá", "P. Nhơn Hưng", "P. Nhơn Thành", "P. Nhơn Hòa",
+      "Xã Nhơn An", "Xã Nhơn Phúc", "Xã Nhơn Lộc", "Xã Nhơn Thọ", "Xã Nhơn Khánh",
+      "Xã Nhơn Mỹ", "Xã Nhơn Hậu", "Xã Nhơn Phong", "Xã Nhơn Tân", "Xã Nhơn Hạnh"
+    ]
   },
   {
     id: "hoai_nhon", name: "TX. Hoài Nhơn", type: "town", region: "binh_dinh",
-    centerLat: 14.3667, centerLon: 109.0167, communes: []
+    centerLat: 14.3667, centerLon: 109.0167,
+    communes: [
+      "P. Bồng Sơn", "P. Tam Quan", "P. Tam Quan Bắc", "P. Tam Quan Nam", "P. Hoài Hảo",
+      "P. Hoài Thanh Tây", "P. Hoài Thanh", "P. Hoài Hương", "P. Hoài Tân", "P. Hoài Xuân",
+      "P. Hoài Đức", "Xã Hoài Sơn", "Xã Hoài Châu Bắc", "Xã Hoài Châu", "Xã Hoài Phú",
+      "Xã Hoài Hải", "Xã Hoài Mỹ"
+    ]
   },
   {
     id: "an_lao", name: "H. An Lão", type: "district", region: "binh_dinh",
-    centerLat: 14.5500, centerLon: 108.9167, communes: []
+    centerLat: 14.5500, centerLon: 108.9167,
+    communes: [
+      "TT. An Lão", "Xã An Dũng", "Xã An Hưng", "Xã An Trung", "Xã An Quang",
+      "Xã An Vinh", "Xã An Toàn", "Xã An Tân", "Xã An Nghĩa", "Xã An Hòa"
+    ]
   },
   {
     id: "hoai_an", name: "H. Hoài Ân", type: "district", region: "binh_dinh",
-    centerLat: 14.3333, centerLon: 108.8833, communes: []
+    centerLat: 14.3333, centerLon: 108.8833,
+    communes: [
+      "TT. Tăng Bạt Hổ", "Xã Ân Hảo Đông", "Xã Ân Hảo Tây", "Xã Ân Sơn", "Xã Ân Mỹ",
+      "Xã Ân Tín", "Xã Ân Thạnh", "Xã Ân Phong", "Xã Ân Đức", "Xã Ân Tường Đông",
+      "Xã Ân Tường Tây", "Xã Ân Hữu", "Xã Ân Nghĩa", "Xã Bok Tới", "Xã Đắk Mang"
+    ]
   },
   {
     id: "phu_cat", name: "H. Phù Cát", type: "district", region: "binh_dinh",
-    centerLat: 14.0500, centerLon: 109.0500, communes: []
+    centerLat: 14.0500, centerLon: 109.0500,
+    communes: [
+      "TT. Ngô Mây", "TT. Cát Tiến", "Xã Cát Sơn", "Xã Cát Lâm", "Xã Cát Hanh",
+      "Xã Cát Tài", "Xã Cát Minh", "Xã Cát Khánh", "Xã Cát Thành", "Xã Cát Hải",
+      "Xã Cát Hiệp", "Xã Cát Trinh", "Xã Cát Tân", "Xã Cát Chánh", "Xã Cát Nhơn",
+      "Xã Cát Thắng", "Xã Cát Tường", "Xã Cát Hưng"
+    ]
   },
   {
     id: "phu_my", name: "H. Phù Mỹ", type: "district", region: "binh_dinh",
-    centerLat: 14.2230, centerLon: 109.0861, communes: []
+    centerLat: 14.2230, centerLon: 109.0861,
+    communes: [
+      "TT. Phù Mỹ", "TT. Bình Dương", "Xã Mỹ Đức", "Xã Mỹ Châu", "Xã Mỹ Thắng",
+      "Xã Mỹ Lộc", "Xã Mỹ Lợi", "Xã Mỹ An", "Xã Mỹ Phong", "Xã Mỹ Trinh",
+      "Xã Mỹ Thọ", "Xã Mỹ Thành", "Xã Mỹ Chánh", "Xã Mỹ Quang", "Xã Mỹ Chánh Tây",
+      "Xã Mỹ Hiệp", "Xã Mỹ Tài", "Xã Mỹ Cát", "Xã Mỹ Hòa"
+    ]
   },
   {
     id: "tay_son", name: "H. Tây Sơn", type: "district", region: "binh_dinh",
-    centerLat: 13.9431, centerLon: 108.8800, communes: []
+    centerLat: 13.9431, centerLon: 108.8800,
+    communes: [
+      "TT. Phú Phong", "Xã Bình Thuận", "Xã Tây An", "Xã Bình Hòa", "Xã Tây Bình",
+      "Xã Bình Thành", "Xã Tây Vinh", "Xã Bình Tường", "Xã Tây Giang", "Xã Bình Nghi",
+      "Xã Tây Thuận", "Xã Vĩnh An", "Xã Bình Tân", "Xã Tây Phú", "Xã Tây Xuân"
+    ]
   },
   {
     id: "tuy_phuoc", name: "H. Tuy Phước", type: "district", region: "binh_dinh",
-    centerLat: 13.8167, centerLon: 109.1500, communes: []
+    centerLat: 13.8167, centerLon: 109.1500,
+    communes: [
+      "TT. Tuy Phước", "TT. Diêu Trì", "Xã Phước Thắng", "Xã Phước Quang", "Xã Phước Hưng",
+      "Xã Phước Hòa", "Xã Phước Sơn", "Xã Phước Hiệp", "Xã Phước Lộc", "Xã Phước Nghĩa",
+      "Xã Phước Thuận", "Xã Phước An", "Xã Phước Thành"
+    ]
   },
   {
     id: "van_canh", name: "H. Vân Canh", type: "district", region: "binh_dinh",
-    centerLat: 13.7000, centerLon: 108.9000, communes: []
+    centerLat: 13.7000, centerLon: 108.9000,
+    communes: [
+      "TT. Vân Canh", "Xã Canh Liên", "Xã Canh Hiệp", "Xã Canh Thuận", "Xã Canh Hòa",
+      "Xã Canh Hiển", "Xã Canh Vinh"
+    ]
   },
   {
     id: "vinh_thanh", name: "H. Vĩnh Thạnh", type: "district", region: "binh_dinh",
-    centerLat: 14.2500, centerLon: 108.6833, communes: []
+    centerLat: 14.2500, centerLon: 108.6833,
+    communes: [
+      "TT. Vĩnh Thạnh", "Xã Vĩnh Sơn", "Xã Vĩnh Kim", "Xã Vĩnh Hảo", "Xã Vĩnh Hiệp",
+      "Xã Vĩnh Thịnh", "Xã Vĩnh Thuận", "Xã Vĩnh Quang", "Xã Vĩnh Hòa"
+    ]
   },
 ];
 
@@ -256,3 +312,7 @@ export const REGION_LABELS: Record<string, string> = {
   gia_lai: "Khu vực Gia Lai",
   binh_dinh: "Khu vực Bình Định",
 };
+
+export const NEW_PROVINCE_FULL_NAME = "Tỉnh Gia Lai (Mới - Mô hình 34 tỉnh thành)";
+export const NEW_PROVINCE_SHORT_NAME = "Tỉnh Gia Lai";
+

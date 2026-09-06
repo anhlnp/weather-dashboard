@@ -1,13 +1,20 @@
 import { useState, useMemo } from "react";
 import {
   Box, Typography, Paper, Stack, LinearProgress, Chip, Divider, Button, Tooltip,
+  Menu, MenuItem, ListItemIcon, ListItemText, Dialog, DialogTitle, DialogContent,
+  DialogActions, FormControl, InputLabel, Select,
 } from "@mui/material";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import TableChartIcon from "@mui/icons-material/TableChart";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
 import MatrixCell from "./MatrixCell";
 import DetailPanel from "./DetailPanel";
 import type { DistrictWeatherData, DistrictDaySummary, FlightCondition } from "../../types/weather";
 import { GIA_LAI_DISTRICTS, REGION_LABELS } from "../../utils/locations";
 import { exportDailyOverviewMatrixToExcel } from "../../utils/dailyExcelExporter";
+import { exportCommuneDetailedMatrixToExcel } from "../../utils/communeExcelExporter";
 
 interface Props {
   data: Map<string, DistrictWeatherData>;
@@ -18,6 +25,36 @@ interface Props {
 export default function FlightMatrix({ data, isLoading, progress }: Props) {
   const [selected, setSelected] = useState<{ districtId: string; date: string; session: "morning" | "afternoon" } | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [exportAnchorEl, setExportAnchorEl] = useState<null | HTMLElement>(null);
+  const [districtExportDialogOpen, setDistrictExportDialogOpen] = useState(false);
+  const [selectedDistrictIdForExport, setSelectedDistrictIdForExport] = useState<string>(GIA_LAI_DISTRICTS[0]?.id || "pleiku");
+
+  const handleOpenExportMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setExportAnchorEl(event.currentTarget);
+  };
+  const handleCloseExportMenu = () => {
+    setExportAnchorEl(null);
+  };
+
+  const handleExportOverview = () => {
+    handleCloseExportMenu();
+    exportDailyOverviewMatrixToExcel(data);
+  };
+
+  const handleExportAllCommunes = () => {
+    handleCloseExportMenu();
+    exportCommuneDetailedMatrixToExcel(data);
+  };
+
+  const handleOpenDistrictDialog = () => {
+    handleCloseExportMenu();
+    setDistrictExportDialogOpen(true);
+  };
+
+  const handleExportSingleDistrict = () => {
+    setDistrictExportDialogOpen(false);
+    exportCommuneDetailedMatrixToExcel(data, { districtIdFilter: selectedDistrictIdForExport });
+  };
 
   // Get unique dates from first available district data
   const dates = useMemo(() => {
@@ -119,15 +156,16 @@ export default function FlightMatrix({ data, isLoading, progress }: Props) {
           />
         </Stack>
 
-        <Tooltip title="Xuất toàn bộ kế hoạch lịch bay 7 ngày của 28 huyện ra file Excel">
+        <Tooltip title="Xuất báo cáo kế hoạch bay ra file Excel theo chuẩn formal (không icon)">
           <span>
             <Button
               variant="contained"
               color="success"
               size="small"
               startIcon={<FileDownloadIcon />}
+              endIcon={<KeyboardArrowDownIcon />}
               disabled={isLoading || data.size === 0}
-              onClick={() => exportDailyOverviewMatrixToExcel(data)}
+              onClick={handleOpenExportMenu}
               sx={{
                 fontWeight: 600,
                 textTransform: "none",
@@ -140,10 +178,71 @@ export default function FlightMatrix({ data, isLoading, progress }: Props) {
                 },
               }}
             >
-              Xuất Excel (7 ngày)
+              Xuất Báo Cáo Excel
             </Button>
           </span>
         </Tooltip>
+
+        {/* Menu lựa chọn loại báo cáo Excel */}
+        <Menu
+          anchorEl={exportAnchorEl}
+          open={Boolean(exportAnchorEl)}
+          onClose={handleCloseExportMenu}
+          slotProps={{
+            paper: {
+              sx: {
+                borderRadius: 2,
+                minWidth: 290,
+                boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+                p: 0.5,
+              },
+            },
+          }}
+        >
+          <MenuItem onClick={handleExportOverview} sx={{ borderRadius: 1, py: 1 }}>
+            <ListItemIcon>
+              <TableChartIcon fontSize="small" color="primary" />
+            </ListItemIcon>
+            <ListItemText
+              primary="Báo cáo Tổng quan (28 Huyện)"
+              secondary="Tóm tắt ma trận 7 ngày cấp Huyện"
+              slotProps={{
+                primary: { sx: { fontWeight: 600, fontSize: "0.85rem" } },
+                secondary: { sx: { fontSize: "0.75rem" } },
+              }}
+            />
+          </MenuItem>
+
+          <Divider sx={{ my: 0.5 }} />
+
+          <MenuItem onClick={handleExportAllCommunes} sx={{ borderRadius: 1, py: 1 }}>
+            <ListItemIcon>
+              <AccountTreeIcon fontSize="small" color="success" />
+            </ListItemIcon>
+            <ListItemText
+              primary="Chi tiết Toàn bộ Xã/Phường"
+              secondary="Toàn tỉnh 28 huyện — chi tiết từng xã"
+              slotProps={{
+                primary: { sx: { fontWeight: 600, fontSize: "0.85rem" } },
+                secondary: { sx: { fontSize: "0.75rem" } },
+              }}
+            />
+          </MenuItem>
+
+          <MenuItem onClick={handleOpenDistrictDialog} sx={{ borderRadius: 1, py: 1 }}>
+            <ListItemIcon>
+              <LocationCityIcon fontSize="small" color="secondary" />
+            </ListItemIcon>
+            <ListItemText
+              primary="Chi tiết theo từng Huyện..."
+              secondary="Chọn 1 Huyện để xuất báo cáo các xã"
+              slotProps={{
+                primary: { sx: { fontWeight: 600, fontSize: "0.85rem" } },
+                secondary: { sx: { fontSize: "0.75rem" } },
+              }}
+            />
+          </MenuItem>
+        </Menu>
       </Stack>
 
       {/* Matrix */}
@@ -371,9 +470,59 @@ export default function FlightMatrix({ data, isLoading, progress }: Props) {
           <DetailPanel
             summary={selectedDetail}
             onClose={() => setSelected(null)}
+            onExportDistrictExcel={() =>
+              exportCommuneDetailedMatrixToExcel(data, { districtIdFilter: selectedDetail.districtId })
+            }
           />
         </Box>
       )}
+
+      {/* Dialog chọn Huyện xuất chi tiết xã */}
+      <Dialog
+        open={districtExportDialogOpen}
+        onClose={() => setDistrictExportDialogOpen(false)}
+        maxWidth="xs"
+        fullWidth
+        slotProps={{ paper: { sx: { borderRadius: 2.5 } } }}
+      >
+        <DialogTitle sx={{ fontWeight: 700, fontSize: "1.05rem", pb: 1 }}>
+          Xuất Báo Cáo Xã/Phường Theo Huyện
+        </DialogTitle>
+        <DialogContent sx={{ pt: 1 }}>
+          <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
+            Chọn đơn vị hành chính cấp huyện để xuất file Excel chi tiết tất cả các xã, phường trực thuộc (theo phân cấp mô hình 34 tỉnh thành mới).
+          </Typography>
+          <FormControl fullWidth size="small">
+            <InputLabel id="district-select-label">Chọn Huyện / Thị xã / TP</InputLabel>
+            <Select
+              labelId="district-select-label"
+              value={selectedDistrictIdForExport}
+              label="Chọn Huyện / Thị xã / TP"
+              onChange={(e) => setSelectedDistrictIdForExport(e.target.value)}
+            >
+              {GIA_LAI_DISTRICTS.map((d) => (
+                <MenuItem key={d.id} value={d.id}>
+                  {d.name} ({d.communes.length} xã/phường) — {d.region === "gia_lai" ? "Gia Lai" : "Bình Định"}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button onClick={() => setDistrictExportDialogOpen(false)} sx={{ textTransform: "none" }}>
+            Hủy
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleExportSingleDistrict}
+            startIcon={<FileDownloadIcon />}
+            sx={{ textTransform: "none", fontWeight: 600 }}
+          >
+            Xuất File Excel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
