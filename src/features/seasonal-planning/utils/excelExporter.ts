@@ -175,7 +175,6 @@ function generateDistrictWorksheetXml(report: LocationMonthlyReport, sheetName?:
   });
 
   const totalDryDays = Math.round(report.monthlyStats.reduce((s, m) => s + m.dryDaysCount, 0));
-  const totalWU = Math.round(report.monthlyStats.reduce((s, m) => s + m.estimatedWU, 0));
   const avgTempYear = Math.round((report.monthlyStats.reduce((s, m) => s + m.avgTemp, 0) / 12) * 10) / 10;
   const avgWindYear = Math.round((report.monthlyStats.reduce((s, m) => s + m.avgWindSpeed, 0) / 12) * 10) / 10;
   const avgSunYear = Math.round((report.monthlyStats.reduce((s, m) => s + m.avgSunshineHours, 0) / 12) * 10) / 10;
@@ -194,18 +193,15 @@ function generateDistrictWorksheetXml(report: LocationMonthlyReport, sheetName?:
       <Column ss:Width="110"/> <!-- Gió TB -->
       <Column ss:Width="115"/> <!-- Gió giật -->
       <Column ss:Width="115"/> <!-- Giờ nắng/ngày -->
-      <Column ss:Width="360"/> <!-- Nhận định thời tiết & Bay -->
-      <Column ss:Width="175"/> <!-- Khuyến nghị chế độ bay -->
-      <Column ss:Width="115"/> <!-- Sản lượng WU -->
 
       <!-- Header Title Rows -->
       <Row ss:Height="26">
-        <Cell ss:MergeAcross="12" ss:StyleID="MainTitle">
+        <Cell ss:MergeAcross="9" ss:StyleID="MainTitle">
           <Data ss:Type="String">BÁO CÁO SỐ LIỆU THỜI TIẾT KHÍ HẬU &amp; KẾ HOẠCH BAY KHẢO SÁT UAV (12 THÁNG)</Data>
         </Cell>
       </Row>
       <Row ss:Height="22">
-        <Cell ss:MergeAcross="12" ss:StyleID="SubTitle">
+        <Cell ss:MergeAcross="9" ss:StyleID="SubTitle">
           <Data ss:Type="String">ĐỊA BÀN: ${escapeXml(report.location.name.toUpperCase())} (${escapeXml(report.location.province.toUpperCase())})</Data>
         </Cell>
       </Row>
@@ -218,15 +214,15 @@ function generateDistrictWorksheetXml(report: LocationMonthlyReport, sheetName?:
         <Cell ss:StyleID="MetaLabel"><Data ss:Type="String">Thuộc tỉnh:</Data></Cell>
         <Cell ss:StyleID="MetaVal"><Data ss:Type="String">${escapeXml(report.location.province)}</Data></Cell>
         <Cell ss:StyleID="MetaLabel"><Data ss:Type="String">Lực lượng:</Data></Cell>
-        <Cell ss:MergeAcross="2" ss:StyleID="MetaVal"><Data ss:Type="String">3 Đội UAV (Bay) + 4 Đội RTK (Mặt đất)</Data></Cell>
+        <Cell ss:MergeAcross="1" ss:StyleID="MetaVal"><Data ss:Type="String">3 Đội UAV (Bay) + 4 Đội RTK (Mặt đất)</Data></Cell>
         <Cell ss:StyleID="MetaLabel"><Data ss:Type="String">Ngày xuất:</Data></Cell>
-        <Cell ss:MergeAcross="3" ss:StyleID="MetaVal"><Data ss:Type="String">${escapeXml(dateStr)}</Data></Cell>
+        <Cell ss:MergeAcross="1" ss:StyleID="MetaVal"><Data ss:Type="String">${escapeXml(dateStr)}</Data></Cell>
       </Row>
       <Row ss:Height="22">
         <Cell ss:StyleID="MetaLabel"><Data ss:Type="String">Tiểu vùng:</Data></Cell>
-        <Cell ss:MergeAcross="3" ss:StyleID="MetaVal"><Data ss:Type="String">${escapeXml(report.location.description)}</Data></Cell>
+        <Cell ss:MergeAcross="2" ss:StyleID="MetaVal"><Data ss:Type="String">${escapeXml(report.location.description)}</Data></Cell>
         <Cell ss:StyleID="MetaLabel"><Data ss:Type="String">Nguồn dữ liệu:</Data></Cell>
-        <Cell ss:MergeAcross="6" ss:StyleID="MetaVal"><Data ss:Type="String">Quy chuẩn Khí hậu QCVN 02:2022/BXD &amp; Open-Meteo ERA5 (Chuỗi 3 năm)</Data></Cell>
+        <Cell ss:MergeAcross="4" ss:StyleID="MetaVal"><Data ss:Type="String">Quy chuẩn Khí hậu QCVN 02:2022/BXD &amp; Open-Meteo ERA5 (Chuỗi 3 năm)</Data></Cell>
       </Row>
       <Row ss:Height="12"/>
 
@@ -242,9 +238,6 @@ function generateDistrictWorksheetXml(report: LocationMonthlyReport, sheetName?:
         <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Gió TB (km/h)</Data></Cell>
         <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Gió giật max (km/h)</Data></Cell>
         <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Giờ nắng (giờ/ngày)</Data></Cell>
-        <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Nhận định Thời tiết &amp; Khả năng Bay</Data></Cell>
-        <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Khuyến nghị chế độ bay</Data></Cell>
-        <Cell ss:StyleID="TableHeader"><Data ss:Type="String">Mục tiêu (WU)</Data></Cell>
       </Row>
 
       <!-- 12 Month Rows -->
@@ -254,14 +247,6 @@ function generateDistrictWorksheetXml(report: LocationMonthlyReport, sheetName?:
           const isRain = s.seasonName.includes("mưa") || s.precipitationSum >= 90;
           const isTrans = s.seasonName.includes("Giao mùa");
           const styleSeason = isStorm ? "CellStorm" : isRain ? "CellRain" : isTrans ? "CellTransition" : "CellDry";
-          const paceText =
-            s.flightPace === "RAPID"
-              ? "Bay nhiều / Tối đa"
-              : s.flightPace === "NORMAL"
-              ? "Bay đều đặn"
-              : s.flightPace === "SLOW"
-              ? "Bay ít / Ca sáng"
-              : "Cấm bay / Hạn chế";
 
           return `
       <Row ss:Height="26">
@@ -275,9 +260,6 @@ function generateDistrictWorksheetXml(report: LocationMonthlyReport, sheetName?:
         <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">${s.avgWindSpeed}</Data></Cell>
         <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">${s.maxWindGust}</Data></Cell>
         <Cell ss:StyleID="CellCenter"><Data ss:Type="Number">${s.avgSunshineHours}</Data></Cell>
-        <Cell ss:StyleID="CellNormal"><Data ss:Type="String">${escapeXml(s.flightAssessment)}</Data></Cell>
-        <Cell ss:StyleID="CellCenter"><Data ss:Type="String">${escapeXml(paceText)}</Data></Cell>
-        <Cell ss:StyleID="CellNumber"><Data ss:Type="Number">${s.estimatedWU}</Data></Cell>
       </Row>`;
         })
         .join("")}
@@ -294,29 +276,26 @@ function generateDistrictWorksheetXml(report: LocationMonthlyReport, sheetName?:
         <Cell ss:StyleID="CellTotal"><Data ss:Type="Number">${avgWindYear}</Data></Cell>
         <Cell ss:StyleID="CellTotal"><Data ss:Type="String">—</Data></Cell>
         <Cell ss:StyleID="CellTotal"><Data ss:Type="Number">${avgSunYear}</Data></Cell>
-        <Cell ss:StyleID="CellTotal"><Data ss:Type="String">Đạt điều kiện bay khảo sát: ${totalDryDays} ngày / 365 ngày</Data></Cell>
-        <Cell ss:StyleID="CellTotal"><Data ss:Type="String">HOÀN THÀNH KẾ HOẠCH</Data></Cell>
-        <Cell ss:StyleID="CellTotal"><Data ss:Type="Number">${totalWU}</Data></Cell>
       </Row>
 
       <Row ss:Height="14"/>
 
       <!-- Strategic Directives -->
       <Row ss:Height="22">
-        <Cell ss:MergeAcross="12" ss:StyleID="SubTitle"><Data ss:Type="String">CHỈ ĐẠO CHIẾN LƯỢC ĐIỀU PHỐI ĐỘI BAY UAV:</Data></Cell>
+        <Cell ss:MergeAcross="9" ss:StyleID="SubTitle"><Data ss:Type="String">CHỈ ĐẠO CHIẾN LƯỢC ĐIỀU PHỐI ĐỘI BAY UAV:</Data></Cell>
       </Row>
       <Row ss:Height="24">
-        <Cell ss:MergeAcross="12" ss:StyleID="CellNormal">
+        <Cell ss:MergeAcross="9" ss:StyleID="CellNormal">
           <Data ss:Type="String">1. Thời kỳ bay cao điểm: Bố trí toàn lực lượng 3 Đội UAV bay tăng tốc tối đa sản lượng 3D 50m và 2D 50m trong các tháng mùa khô (${report.location.province === "Bình Định" ? "Tháng 1 - Tháng 8" : "Tháng 11 - Tháng 4"}).</Data>
         </Cell>
       </Row>
       <Row ss:Height="24">
-        <Cell ss:MergeAcross="12" ss:StyleID="CellNormal">
+        <Cell ss:MergeAcross="9" ss:StyleID="CellNormal">
           <Data ss:Type="String">2. Thời kỳ phòng ngừa rủi ro: ${report.location.province === "Bình Định" ? "Tháng 10 - Tháng 11 mưa bão miền Trung, gió giật mạnh -> Cấm bay ven biển, bảo dưỡng trang thiết bị và xử lý bình sai ảnh." : "Tháng 6 - Tháng 8 mưa dầm Tây Nguyên -> Tranh thủ bay ca sáng sớm (06h-10h), hoàn thành bay trước dông chiều."}</Data>
         </Cell>
       </Row>
       <Row ss:Height="24">
-        <Cell ss:MergeAcross="12" ss:StyleID="CellNormal">
+        <Cell ss:MergeAcross="9" ss:StyleID="CellNormal">
           <Data ss:Type="String">3. Phối hợp mặt đất RTK: 4 Đội RTK đo trước mốc khống chế tọa độ 3-5 ngày và kiểm tra bãi cất hạ cánh an toàn trước mỗi ca bay.</Data>
         </Cell>
       </Row>
